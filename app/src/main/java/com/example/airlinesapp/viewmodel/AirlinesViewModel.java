@@ -4,15 +4,16 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
 import com.example.airlinesapp.datamodel.models.Airline;
+import com.example.airlinesapp.datamodel.repository.AirlineRepository;
 
 import java.util.ArrayList;
 
-public class AirlinesListViewModel extends ViewModel {
+public class AirlinesViewModel extends ViewModel {
 
     private MutableLiveData<ArrayList<Airline>> airlines;
     private AirlineRepository airlineRepository;
 
-    public AirlinesListViewModel() {
+    public AirlinesViewModel() {
         airlineRepository = new AirlineRepository();
     }
 

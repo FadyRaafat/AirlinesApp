@@ -31,6 +31,8 @@ public class FavoriteAirlinesAdapter extends RecyclerView.Adapter<FavoriteAirlin
     public FavoriteAirlinesAdapter(FavoriteAirlinesActivity mActivity, List<FavoriteAirlines> airlinesList) {
         this.airlinesList = airlinesList;
         this.mActivity = mActivity;
+        notifyDataSetChanged();
+
 
     }
 
@@ -53,7 +55,9 @@ public class FavoriteAirlinesAdapter extends RecyclerView.Adapter<FavoriteAirlin
         holder.airlineNumber.setText(favairline.getPhone());
         holder.viewcolor.setBackgroundColor(Color.parseColor(mColors[position % 9]));
         holder.unfavoriteIV.setOnClickListener(v -> {
+/*
             mActivity.getDrawable(R.drawable.ic_favorite_border);
+*/
             unFavorite(airlinesList.get(position));
         });
     }

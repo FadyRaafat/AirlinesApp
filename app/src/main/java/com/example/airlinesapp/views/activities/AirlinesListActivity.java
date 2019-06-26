@@ -12,15 +12,14 @@ import android.widget.ProgressBar;
 
 import com.example.airlinesapp.R;
 import com.example.airlinesapp.datamodel.models.Airline;
-import com.example.airlinesapp.datamodel.models.FavoriteAirlines;
-import com.example.airlinesapp.viewmodel.AirlinesListViewModel;
+import com.example.airlinesapp.viewmodel.AirlinesViewModel;
 import com.example.airlinesapp.views.adapters.AirlinesAdapter;
 
 import java.util.ArrayList;
 
 public class AirlinesListActivity extends AppCompatActivity implements AirlinesAdapter.AirlinesViewHolder.ItemClickListener {
 
-    private AirlinesListViewModel mViewModel;
+    private AirlinesViewModel mViewModel;
     private ArrayList<Airline> airlineLIst;
     private RecyclerView recyclerView;
     private AirlinesAdapter mAdapter;
@@ -34,13 +33,13 @@ public class AirlinesListActivity extends AppCompatActivity implements AirlinesA
         recyclerView = findViewById(R.id.airlines_RV);
         favoriteFAB = findViewById(R.id.favorite_FAB);
         PB = findViewById(R.id.progressBar);
-        mViewModel = ViewModelProviders.of(this).get(AirlinesListViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(AirlinesViewModel.class);
         mViewModel.init();
         mViewModel.getAirLinesList().observe(this, airlinesList ->{
             if(airlinesList != null){
                 PB.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
-                mAdapter = new AirlinesAdapter(airlinesList, getApplicationContext(), recyclerView);
+                mAdapter = new AirlinesAdapter(airlinesList, AirlinesListActivity.this, recyclerView);
                 mAdapter.setItemClickListener(this);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
                 recyclerView.setLayoutManager(mLayoutManager);

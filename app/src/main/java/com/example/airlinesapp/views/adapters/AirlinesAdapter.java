@@ -1,7 +1,9 @@
 package com.example.airlinesapp.views.adapters;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import com.example.airlinesapp.Utils.SnackBarUtils;
 import com.example.airlinesapp.datamodel.models.Airline;
 import com.example.airlinesapp.datamodel.models.FavoriteAirlines;
 import com.example.airlinesapp.datamodel.room.AppDataBase;
+import com.example.airlinesapp.viewmodel.FavoriteAirlinesViewModel;
 
 import java.util.ArrayList;
 
@@ -24,6 +27,7 @@ public class AirlinesAdapter extends RecyclerView.Adapter<AirlinesAdapter.Airlin
     RecyclerView rv;
     private AirlinesViewHolder.ItemClickListener onItemClickListener;
     private AppDataBase db;
+    FavoriteAirlinesViewModel favoriteAirlinesViewModel;
 
     public String[] mColors = {"#3F51B5", "#FF9800", "#009688", "#673AB7", "#ff0000", "#fffa00",
             "#6aff00", "#460684", "#a800ff"};
@@ -38,8 +42,6 @@ public class AirlinesAdapter extends RecyclerView.Adapter<AirlinesAdapter.Airlin
     public void setItemClickListener(AirlinesViewHolder.ItemClickListener clickListener) {
         onItemClickListener = clickListener;
     }
-
-
 
 
     @Override
@@ -61,22 +63,22 @@ public class AirlinesAdapter extends RecyclerView.Adapter<AirlinesAdapter.Airlin
 
         holder.favoriteIV.setTag("notFavourite");
         holder.favoriteIV.setOnClickListener(v -> {
-            if (holder.favoriteIV.getTag().equals("notFavourite"))
-            {
+            if (holder.favoriteIV.getTag().equals("notFavourite")) {
                 favorite(airline);
                 holder.favoriteIV.setTag("favourite");
                 SnackBarUtils.SnackBar(rv, "Saved Successfully..");
-            }
-            else{
+            } else {
                 SnackBarUtils.SnackBar(rv, "Already Saved");
 
             }
         });
     }
 
-    private void favorite(Airline airline)
-    {
-        db = AppDataBase.getDatabase(context);
+    private void favorite(Airline airline) {
+
+
+        favoriteAirlinesViewModel = ViewModelProviders.of((FragmentActivity) context).get(FavoriteAirlinesViewModel.class);
+
         FavoriteAirlines favoriteAirline = new FavoriteAirlines(
                 airline.getCode(),
                 airline.getDefaultName(),
@@ -85,7 +87,8 @@ public class AirlinesAdapter extends RecyclerView.Adapter<AirlinesAdapter.Airlin
                 airline.getPhone(),
                 airline.getSite(),
                 airline.getUsName());
-        db.getFavoriteAirlinesDao().insertAll(favoriteAirline);
+        favoriteAirlinesViewModel.insert(favoriteAirline);
+
     }
 
     @Override
@@ -123,10 +126,6 @@ public class AirlinesAdapter extends RecyclerView.Adapter<AirlinesAdapter.Airlin
         }
 
     }
-
-
-
-
 
 
 }

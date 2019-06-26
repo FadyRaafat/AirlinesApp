@@ -1,4 +1,4 @@
-package com.example.airlinesapp.viewmodel;
+package com.example.airlinesapp.datamodel.repository;
 
 
 import android.arch.lifecycle.MutableLiveData;

@@ -26,8 +26,8 @@ public class ServiceBuilder {
                             .newBuilder()
                             .build();
                     return chain.proceed(request); }})
-                    .readTimeout(10, TimeUnit.SECONDS)
-                    .connectTimeout(10, TimeUnit.SECONDS);
+                    .readTimeout(3000, TimeUnit.MILLISECONDS)
+                    .connectTimeout(3000, TimeUnit.MILLISECONDS);
     private static Retrofit.Builder builder;
 
     private static Retrofit retrofit;

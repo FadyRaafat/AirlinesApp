@@ -1,5 +1,6 @@
 package com.example.airlinesapp.datamodel.room;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -20,7 +21,7 @@ public interface AirlineDao {
     void updateAll(FavoriteAirlines... favoriteAirlines);
 
     @Query("SELECT * FROM favoriteAirlines")
-    List<FavoriteAirlines> getAllFavoriteAirlines();
+    LiveData<List<FavoriteAirlines>> getAllFavoriteAirlines();
 
     @Delete
     void deleteAll(FavoriteAirlines... favoriteAirlines);

@@ -11,18 +11,23 @@ public abstract class AppDataBase extends RoomDatabase {
 
     public static final String DB_NAME = "favoriteairlines";
 
-    private static AppDataBase INSTANCE;
+    public abstract AirlineDao getFavoriteAirlinesDao();
+
+    private static volatile AppDataBase INSTANCE;
 
     public static AppDataBase getDatabase(Context context) {
         if (INSTANCE == null) {
-            INSTANCE =
-                    Room.databaseBuilder(context.getApplicationContext(), AppDataBase.class, DB_NAME)
-                            .allowMainThreadQueries().build();
+            synchronized (AppDataBase.class) {
+
+                INSTANCE =
+                        Room.databaseBuilder(context.getApplicationContext(),
+                                AppDataBase.class, DB_NAME)
+                                .allowMainThreadQueries().build();
+            }
         }
         return INSTANCE;
     }
 
-    public abstract AirlineDao getFavoriteAirlinesDao();
 
 
 }
