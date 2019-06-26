@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.airlinesapp.datamodel.models.FavoriteAirlines;
+import com.example.airlinesapp.datamodel.repository.FavoriteAirlinesRepository;
 import com.example.airlinesapp.datamodel.room.AirlineDao;
 import com.example.airlinesapp.datamodel.room.AppDataBase;
 
@@ -14,82 +15,32 @@ import java.util.List;
 
 public class FavoriteAirlinesViewModel extends AndroidViewModel {
 
-    private String TAG = this.getClass().getSimpleName();
-    private AirlineDao airlineDao;
-    private AppDataBase appDB;
+    private FavoriteAirlinesRepository mRepository;
+    // Using LiveData and caching what getAlphabetizedWords returns has several benefits:
+    // - We can put an observer on the data (instead of polling for changes) and only update the
+    //   the UI when the data actually changes.
+    // - Repository is completely separated from the UI through the ViewModel.
     private LiveData<List<FavoriteAirlines>> mAllFavoriteAirlines;
-
 
     public FavoriteAirlinesViewModel(Application application) {
         super(application);
-
-        appDB = AppDataBase.getDatabase(application);
-        airlineDao = appDB.getFavoriteAirlinesDao();
-        mAllFavoriteAirlines = airlineDao.getAllFavoriteAirlines();
+        mRepository = new FavoriteAirlinesRepository(application);
+        mAllFavoriteAirlines = mRepository.getAllFavoriteAirlines();
     }
 
     public LiveData<List<FavoriteAirlines>> getAllFavoriteAirlines() {
         return mAllFavoriteAirlines;
     }
 
-
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        Log.i(TAG, "ViewModel Destroyed");
-    }
-
-
     public void insert(FavoriteAirlines favoriteAirlines) {
-        new InsertAsyncTask(airlineDao).execute(favoriteAirlines);
+        mRepository.insert(favoriteAirlines);
     }
 
     public void delete(FavoriteAirlines favoriteAirlines) {
-        new DeleteAsyncTask(airlineDao).execute(favoriteAirlines);
+        mRepository.delete(favoriteAirlines);
     }
 
 
-
-    private class OperationsAsyncTask extends AsyncTask<FavoriteAirlines, Void, Void> {
-
-        AirlineDao mAsyncTaskDao;
-
-        OperationsAsyncTask(AirlineDao dao) {
-            this.mAsyncTaskDao = dao;
-        }
-
-        @Override
-        protected Void doInBackground(FavoriteAirlines... favoriteAirlines) {
-            return null;
-        }
-    }
-
-
-    private class InsertAsyncTask extends OperationsAsyncTask {
-
-        InsertAsyncTask(AirlineDao mAirlineDao) {
-            super(mAirlineDao);
-        }
-
-        @Override
-        protected Void doInBackground(FavoriteAirlines... favoriteAirlines) {
-            mAsyncTaskDao.insertAll(favoriteAirlines[0]);
-            return null;
-        }
-    }
-
-    private class DeleteAsyncTask extends OperationsAsyncTask {
-
-        DeleteAsyncTask(AirlineDao mAirlineDao) {
-            super(mAirlineDao);
-        }
-
-        @Override
-        protected Void doInBackground(FavoriteAirlines... favoriteAirlines) {
-            mAsyncTaskDao.deleteAll(favoriteAirlines[0]);
-            return null;
-        }
-    }
 
 
 }
