@@ -46,6 +46,9 @@ public class AirlinesAdapter extends RecyclerView.Adapter<AirlinesAdapter.Airlin
 
     @Override
     public AirlinesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        favoriteAirlinesViewModel =
+                ViewModelProviders.of((FragmentActivity) context)
+                        .get(FavoriteAirlinesViewModel.class);
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.airline_item_layout, parent, false);
         return new AirlinesViewHolder(itemView);
@@ -61,14 +64,15 @@ public class AirlinesAdapter extends RecyclerView.Adapter<AirlinesAdapter.Airlin
         holder.viewcolor.setBackgroundColor(Color.parseColor(mColors[position % 9]));
         holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(airline));
 
-        holder.favoriteIV.setTag("notFavourite");
         holder.favoriteIV.setOnClickListener(v -> {
-            if (holder.favoriteIV.getTag().equals("notFavourite")) {
+            if (ifExists(airline.getDefaultName())) {
+                SnackBarUtils.SnackBar(rv, "Already Saved..");
+
+            } else {
                 favorite(airline);
+                holder.favoriteIV.setImageResource(R.drawable.ic_like_full);
                 holder.favoriteIV.setTag("favourite");
                 SnackBarUtils.SnackBar(rv, "Saved Successfully..");
-            } else {
-                SnackBarUtils.SnackBar(rv, "Already Saved");
 
             }
         });
@@ -76,8 +80,6 @@ public class AirlinesAdapter extends RecyclerView.Adapter<AirlinesAdapter.Airlin
 
     private void favorite(Airline airline) {
 
-
-        favoriteAirlinesViewModel = ViewModelProviders.of((FragmentActivity) context).get(FavoriteAirlinesViewModel.class);
 
         FavoriteAirlines favoriteAirline = new FavoriteAirlines(
                 airline.getCode(),
@@ -90,6 +92,11 @@ public class AirlinesAdapter extends RecyclerView.Adapter<AirlinesAdapter.Airlin
         favoriteAirlinesViewModel.insert(favoriteAirline);
 
     }
+
+    private boolean ifExists(String defaultName) {
+        return favoriteAirlinesViewModel.ifExists(defaultName);
+    }
+
 
     @Override
     public long getItemId(int position) {

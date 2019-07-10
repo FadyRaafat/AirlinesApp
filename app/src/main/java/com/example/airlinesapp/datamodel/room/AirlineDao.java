@@ -23,6 +23,10 @@ public interface AirlineDao {
     @Query("SELECT * FROM favoriteAirlines")
     LiveData<List<FavoriteAirlines>> getAllFavoriteAirlines();
 
+    @Query("SELECT COUNT(1) FROM favoriteAirlines WHERE defaultName= :defaultName")
+    boolean ifExists(String defaultName);
+
+
     @Delete
     void deleteAll(FavoriteAirlines... favoriteAirlines);
 }

@@ -13,7 +13,8 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_layout);
-        ThreadUtils.run(() -> {
+        ThreadUtils.run(() ->
+        {
             Intent i = new Intent(SplashActivity.this, AirlinesListActivity.class);
             startActivity(i);
             finish();

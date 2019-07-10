@@ -38,6 +38,10 @@ public class FavoriteAirlinesRepository {
         new FavoriteAirlinesRepository.DeleteAsyncTask(airlineDao).execute(favoriteAirlines);
     }
 
+    public boolean ifExists(String defaultName){
+        return airlineDao.ifExists(defaultName);
+    }
+
 
     private class OperationsAsyncTask extends AsyncTask<FavoriteAirlines, Void, Void> {
 

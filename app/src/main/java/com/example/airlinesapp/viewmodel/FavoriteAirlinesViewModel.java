@@ -36,6 +36,9 @@ public class FavoriteAirlinesViewModel extends AndroidViewModel {
         mRepository.insert(favoriteAirlines);
     }
 
+    public boolean ifExists(String defaultName){
+        return mRepository.ifExists(defaultName);
+    }
     public void delete(FavoriteAirlines favoriteAirlines) {
         mRepository.delete(favoriteAirlines);
     }
