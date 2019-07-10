@@ -13,6 +13,8 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_layout);
+
+        int x = 1;
         ThreadUtils.run(() ->
         {
             Intent i = new Intent(SplashActivity.this, AirlinesListActivity.class);
@@ -20,6 +22,7 @@ public class SplashActivity extends AppCompatActivity {
             finish();
         }).after(3000).exec();
 
+    //this is a change for testing github desktop
     }
 
 }
